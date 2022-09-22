@@ -1,0 +1,153 @@
+---
+title: "Stratigraphic data in R"
+author: "Joe Roe<br><small><https://joeroe.io></small>"
+url: "https://joeroe.io"
+format: 
+  revealjs:
+    theme: ./gruvbox-dark.scss
+    center: true
+    echo: true
+---
+
+📦 stratigraphr
+: <https://stratigraphr.joeroe.io>
+
+📦 c14
+: <https://c14.joeroe.io>
+
+---
+
+```{r echo=FALSE}
+library(tibble)
+options(pillar.print_min = 3)
+options(pillar.print_max = 5)
+options(pillar.width = 60)
+```
+```{r}
+library(readr)
+read_csv("example_data/harris12.csv")
+```
+
+---
+
+```{r}
+library(stratigraphr)
+read_lst("example_data/bonn.lst")
+```
+
+---
+
+📦 igraph <<https://igraph.org/r/>>
+
+```{r}
+harris12 |>
+   tidyr::unnest(above) |>
+   igraph::graph_from_data_frame() |>
+   plot()
+```
+
+---
+
+📦 ggraph <<https://ggraph.data-imaginist.com/>>
+
+```{r}
+library(ggraph)
+h12 <- stratigraph(harris12, "context", "above")
+ggraph(h12, layout = "sugiyama") +
+  geom_edge_elbow() +
+  geom_node_label(aes(label = context), label.r = unit(0, "mm")) +
+  theme_graph()
+```
+
+---
+
+```{r}
+strat_is_valid(h12)
+```
+
+```{r warning=TRUE}
+bad_h12 <- tidygraph::bind_edges(h12, data.frame(from = 6, to = 5))
+strat_is_valid(bad_h12)
+```
+
+---
+
+```{r}
+harris12 |>
+   tidyr::unnest(above) |>
+   igraph::graph_from_data_frame() |>
+   str()
+```
+---
+
+📦 tidygraph <<https://tidygraph.data-imaginist.com/>>
+
+```{r}
+h12
+```
+---
+
+```{r}
+library(c14)
+library(dplyr)
+ppnd %>% 
+  filter(site == "Ganj Dareh") %>% 
+  mutate(cal = c14_calibrate(cra, error))
+```
+
+---
+
+:::: {.columns}
+
+::: {.column}
+```{r}
+shub1_radiocarbon %>% 
+  filter(!outlier) %>% 
+  group_by(phase) %>% 
+  summarise(
+    cql = cql_phase(phase, 
+                    cql_r_date(lab_id, cra, error))
+  ) %>% 
+  arrange(desc(phase)) %>% 
+  summarise(
+    cql = cql_sequence("Shubayqa 1", 
+                       cql, 
+                       boundaries = TRUE)
+  ) %>%
+  pluck("cql") %>%
+  cql() ->
+  shub1_cql
+```
+:::
+
+::: {.column}
+```{r echo=FALSE}
+shub1_cql
+```
+:::
+
+::::
+
+---
+
+📦 oxcAAR <<https://github.com/ISAAKiel/oxcAAR>>
+
+```{.r}
+library(oxcAAR)
+quickSetupOxcal(path = fs::path_temp())
+shub1_oxcal <- executeOxcalScript(shub1_cql)
+readOxcalOutput(shub1_oxcal) %>% 
+  parseOxcalOutput() %>% 
+  plot()
+```
+
+---
+
+📦 stratigraphr
+: <https://stratigraphr.joeroe.io>
+
+📦 c14
+: <https://c14.joeroe.io>
+
+{{< fa brands github >}} these slides:
+: <https://github.com/joeroe/archeofoss2022_stratigraphr>
