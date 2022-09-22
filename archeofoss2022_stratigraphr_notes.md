@@ -1,12 +1,15 @@
 * Introduction
-* Aside: I'll be talking about these two packages in development
+  * This talk is a brief outline of the capabilities of the statistical programming language R in handling archaeological stratigraphic data
+  * With a focus on these two packages in development (stratigraphr and c14)
 * Handling stratigraphic data in R is easy!
   * If you can export your database to plain text, let's go.
   * [stratigraphr] More complex formats, e.g. LST
 * Graph representation
   * A graph is by far the most common formalism; more specifically, per Dye & Buck, a DAG
   * R has a *lot* of functionality for graph data, analysis, and visualisation
-  * igraph
+  * igraph is the core:
+    * Wrapper for a C library, so FAST and INTEROPERABLE
+    * Very large library of functions, e.g. for checking validity (is it a DAG) or removing redundancy (transitive reduction).
 * Examples with igraph
   * [stratigraphr] produce harris matrix visualisation
   * [stratigraphr] check validity
