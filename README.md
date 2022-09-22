@@ -1,7 +1,8 @@
 # Stratigraphic data in R
 **Joe Roe**
-:Institute of Archaeological Sciences, University of Bern, Bern, Switzerland
-:[joeroe.io](https://joeroe.io)
+
+* Institute of Archaeological Sciences, University of Bern, Bern, Switzerland
+* [joeroe.io](https://joeroe.io)
 
 This is the source repository for a talk presented at [ArcheoFOSS 2022](https://www.archeofoss.org/2022/), in panel 7, "archaeological stratigraphy data".
 
